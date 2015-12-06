@@ -4,6 +4,7 @@ var del = require('del');
 var uglify = require('gulp-uglify');
 var browserify = require('gulp-browserify');
 var rename = require('gulp-rename');
+
 var runSequence = require('gulp-run-sequence');
 
 var DIST_WEB = 'dist/web'
@@ -30,7 +31,7 @@ gulp.task('brfs-scripts', function() {
             transform: ['brfs'],
             debug : false
         }))
-        //.pipe(uglify())
+        .pipe(uglify())
         .pipe(rename('_frame.js'))
         .pipe(gulp.dest(DIST_WEB));
 });
@@ -41,7 +42,7 @@ gulp.task('worker', function() {
         .pipe(browserify({
             debug : false
         }))
-        //.pipe(uglify())
+        .pipe(uglify())
         .pipe(rename('_worker.js'))
         .pipe(gulp.dest(DIST_WEB));
 });
@@ -76,11 +77,12 @@ gulp.task('brfs-jailed', function () {
             debug : false,
             standalone: 'jailed'
         }))
+        .pipe(uglify())
         .pipe(gulp.dest(DIST_WEB));
 });
 
 gulp.task('npm-web-package', function () {
-    runSequence(['brfs-scripts', 'worker'], 'brfs-jailed')
+    runSequence('worker', 'brfs-scripts', 'brfs-jailed')
 });
 
 gulp.task('build-web', ['scripts', 'worker', 'frame-html', 'copy-jailed']);
