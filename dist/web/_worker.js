@@ -661,6 +661,11 @@ self.connection = {};
 
 require('./_pluginWebWorker');
 require('./_pluginCore');
+
+self.postMessage({
+	type : "initialized",
+	dedicatedThread : true
+}); 
 },{"./_pluginCore":2,"./_pluginWebWorker":3}],5:[function(require,module,exports){
 (function (process,global){
 /*!
